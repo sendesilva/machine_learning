@@ -165,4 +165,4 @@ library(mclust)
 mv <- apply(pred, 1, function(object) majorityVote(object)$majority)
 mean(as.factor(mv) == mnist_27$test$y)
 
-# Q5
+
