@@ -28,6 +28,7 @@ RMSE <- function(true_ratings, predicted_ratings){
 }
 
 ## Building Recommendation Systems
+
 # simplest model with all movies having same rating Y_hat = mu_hat + epsilon
 mu_hat <- mean(train_set$rating)
 mu_hat # avg across all users and movies
@@ -104,4 +105,11 @@ data("movielens")
 
 # Q1. Compute the number of ratings for each movie and then plot it against the year the movie came out. 
 # Use the square root transformation on the counts. What year has the highest median number of ratings?
-
+movielens %>%
+  group_by(movieId) %>%
+  r_num <- movielens$rating %>%
+  na.omit() %>%
+  r_nums <- length(r_num) %>%
+  ggplot(aes(year = movielens$year, r_nums))
+# Error in eval(lhs, parent, parent) : object 'r_num' not found
+# max(movielens$year, na.rm = T)
