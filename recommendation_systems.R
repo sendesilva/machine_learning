@@ -112,4 +112,8 @@ movielens %>%
   r_nums <- length(r_num) %>%
   ggplot(aes(year = movielens$year, r_nums))
 # Error in eval(lhs, parent, parent) : object 'r_num' not found
+
+
 # max(movielens$year, na.rm = T)
+
+
