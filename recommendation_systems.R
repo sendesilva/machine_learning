@@ -105,6 +105,7 @@ data("movielens")
 
 # Q1. Compute the number of ratings for each movie and then plot it against the year the movie came out. 
 # Use the square root transformation on the counts. What year has the highest median number of ratings?
+<<<<<<< HEAD
 movielens %>%
   group_by(movieId) %>%
   r_num <- movielens$rating %>%
@@ -113,3 +114,9 @@ movielens %>%
   ggplot(aes(year = movielens$year, r_nums))
 # Error in eval(lhs, parent, parent) : object 'r_num' not found
 # max(movielens$year, na.rm = T)
+=======
+
+
+# max(movielens$year, na.rm = T)
+
+>>>>>>> 8ca5aff9e3f7817b0c4d8b025b164b173e453c21
