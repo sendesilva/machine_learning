@@ -72,3 +72,48 @@ train_set %>% count(movieId) %>%
   slice(1:10) %>% 
   knitr::kable()
 
+
+# Q1. Compute the number of ratings for each movie and then plot it against the year the movie came out. 
+# Use the square root transformation on the counts. What year has the highest median number of ratings?
+
+library(dslabs)
+library(tidyverse)
+library(dplyr)
+data("movielens")
+library(caret)
+
+# median num rating per year
+num_rating <- movielens %>% 
+  na.omit() %>% 
+  select(movieId, rating, year) %>% 
+  group_by(movieId, year) %>%
+  summarise(n_rating = n()) %>%
+  ungroup() %>%
+  arrange(desc(n_rating)) 
+
+knitr::kable(head(num_rating, 10))
+
+median_rating <- num_rating %>%
+  select(n_rating, year) %>%
+  group_by(year) %>%
+  summarise(med = median(n_rating, na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(desc(med))
+
+knitr::kable(head(median_rating))
+
+# Answer:
+movielens %>% group_by(movieId) %>%
+  summarize(n = n(), year = as.character(first(year))) %>%
+  qplot(year, n, data = ., geom = "boxplot") +
+  coord_trans(y = "sqrt") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+# Q2. We see that, on average, movies that came out after 1993 get more ratings. We also see that with newer
+# movies, starting in 1993, the number of ratings decreases with year: the more recent a movie is, the less 
+# time users have had to rate it.
+# Among movies that came out in 1993 or later, what are the 25 movies with the most ratings per year, and 
+# what is the average rating of each of the top 25 movies?
+# What is the average rating for the movie The Shawshank Redemption?
+# What is the average number of ratings per year for the movie Forrest Gump?
