@@ -175,6 +175,7 @@ head(movielens)
 # Q6. Compute the average rating for each week and plot this average against day. Hint: use the round_date 
 # function before you group_by.
 
+<<<<<<< HEAD
 # from ans
 movielens %>% mutate(date = round_date(date, unit = "week")) %>%
   group_by(date) %>%
@@ -185,5 +186,7 @@ movielens %>% mutate(date = round_date(date, unit = "week")) %>%
 
 
 
+=======
+>>>>>>> c3eb0bc2fe6a0ad1aff94fb432c9adb654ac55b2
 
 
