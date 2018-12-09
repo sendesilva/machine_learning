@@ -136,6 +136,7 @@ knitr::kable(head(num_rating_yr, 25))
 # code incomplete: yrs should incorporate later start dates of new movies
 
 
+
 # Q3. From the table constructed in Q2, we can see that the most frequently rated movies tend to have above 
 # average ratings. This is not surprising: more people watch popular movies. To confirm this, stratify the 
 # post-1993 movies by ratings per year and compute their average ratings. Make a plot of average rating 
@@ -169,5 +170,6 @@ movielens %>%
  
 movielens <- mutate(movielens, date = as_datetime(timestamp)) # from lubridate package
 head(movielens)
+
 
 
