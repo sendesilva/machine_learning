@@ -117,3 +117,23 @@ movielens %>% group_by(movieId) %>%
 # what is the average rating of each of the top 25 movies?
 # What is the average rating for the movie The Shawshank Redemption?
 # What is the average number of ratings per year for the movie Forrest Gump?
+
+# avg num of rating per movie
+yrs <- length(unique(movielens$year[movielens$year>=1993]))
+num_rating_yr <- movielens %>% filter(year >= 1993) %>%
+  na.omit() %>%
+  select(title, rating, year) %>%
+  group_by(title, year) %>%
+  summarise(n = n(), ratings_yr = n/yrs, mean_r = mean(rating, na.rm = TRUE), 
+            yr = as.character(first(year))) %>%
+  ungroup() %>% 
+  arrange(desc(ratings_yr))
+
+knitr::kable(head(num_rating_yr, 25))
+
+# avg num of ratings /yr for Forrest Gump = 13.64 xx starts 1994 adjust years to 24 = 14.21 chk
+# avg rating for movie Shawshank Redemption, The = 4.487138 chk
+# code incomplete: yrs should incorporate later start dates of new movies
+
+
+
