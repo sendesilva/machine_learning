@@ -185,5 +185,15 @@ movielens %>% mutate(date = round_date(date, unit = "week")) %>%
 
 
 
+# Q8. The movielens data also has a genres column. This column includes every genre that applies to the movie.
+# Some movies fall under several genres. Define a category as whatever combination appears in this column. 
+# Keep only categories with more than 1,000 ratings. Then compute the average and standard error for each 
+# category. Plot these as error bar plots. Which genre has the lowest average rating?
+# Enter the name of the genre exactly as reported in the plot, including capitalization and punctuation.
 
+movielens %>% select(genres, rating) %>%
+  group_by(genres) %>%
+  summarize(n = n(), rating = mean(rating)) %>%
+  filter(n > 1000) %>%
+  arrange(rating)
 
