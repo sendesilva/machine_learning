@@ -172,4 +172,18 @@ movielens <- mutate(movielens, date = as_datetime(timestamp)) # from lubridate p
 head(movielens)
 
 
+# Q6. Compute the average rating for each week and plot this average against day. Hint: use the round_date 
+# function before you group_by.
+
+# from ans
+movielens %>% mutate(date = round_date(date, unit = "week")) %>%
+  group_by(date) %>%
+  summarize(rating = mean(rating)) %>%
+  ggplot(aes(date, rating)) +
+  geom_point() +
+  geom_smooth()
+
+
+
+
 
