@@ -1,4 +1,4 @@
-### Regularization
+### Recommendation systems 2
 library(dslabs)
 library(tidyverse)
 library(dplyr)
@@ -197,3 +197,4 @@ movielens %>% select(genres, rating) %>%
   filter(n > 1000) %>%
   arrange(rating)
 
+# End
