@@ -117,3 +117,57 @@ movielens %>% group_by(movieId) %>%
 # what is the average rating of each of the top 25 movies?
 # What is the average rating for the movie The Shawshank Redemption?
 # What is the average number of ratings per year for the movie Forrest Gump?
+
+# avg num of rating per movie
+yrs <- length(unique(movielens$year[movielens$year>=1993]))
+num_rating_yr <- movielens %>% filter(year >= 1993) %>%
+  na.omit() %>%
+  select(title, rating, year) %>%
+  group_by(title, year) %>%
+  summarise(n = n(), ratings_yr = n/yrs, mean_r = mean(rating, na.rm = TRUE), 
+            yr = as.character(first(year))) %>%
+  ungroup() %>% 
+  arrange(desc(ratings_yr))
+
+knitr::kable(head(num_rating_yr, 25))
+
+# avg num of ratings /yr for Forrest Gump = 13.64 xx starts 1994 adjust years to 24 = 14.21 chk
+# avg rating for movie Shawshank Redemption, The = 4.487138 chk
+# code incomplete: yrs should incorporate later start dates of new movies
+
+
+# Q3. From the table constructed in Q2, we can see that the most frequently rated movies tend to have above 
+# average ratings. This is not surprising: more people watch popular movies. To confirm this, stratify the 
+# post-1993 movies by ratings per year and compute their average ratings. Make a plot of average rating 
+# versus ratings per year and show an estimate of the trend.
+# What type of trend do you observe?
+movielens %>% 
+  filter(year >= 1993) %>%
+  group_by(movieId) %>%
+  summarize(n = n(), years = 2018 - first(year),
+            title = title[1],
+            rating = mean(rating)) %>%
+  mutate(rate = n/years) %>%
+  top_n(25, rate) %>%
+  arrange(desc(rate)) %>%
+  ggplot(aes(rating, rate)) +
+  geom_point()
+
+
+# Q4. Suppose you are doing a predictive analysis in which you need to fill in the missing ratings with 
+# some value. Given your observations in the exercise in Q3, which of the following strategies would be most
+# appropriate?
+# Ans: Explanation Because a lack of ratings is associated with lower ratings, it would be most appropriate
+# to fill in the missing value with a lower value than the average. You should try out different values to 
+# fill in the missing value and evaluate prediction in a test set.
+
+
+# Q5. The movielens dataset also includes a time stamp. This variable represents the time and data in which 
+# the rating was provided. The units are seconds since January 1, 1970. Create a new column date with the 
+# date. Which code correctly creates this new column?
+
+ 
+movielens <- mutate(movielens, date = as_datetime(timestamp)) # from lubridate package
+head(movielens)
+
+
