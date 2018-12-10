@@ -130,3 +130,122 @@ rmse_results <- bind_rows(rmse_results,
                           data_frame(method="Regularized Movie + User Effect Model",  
                                      RMSE = min(rmses)))
 rmse_results %>% knitr::kable()  # rmse = 0.881
+
+
+
+### Comprehension check: Regularization
+## 100 schools dataset, n = num students
+set.seed(1986)
+n <- round(2^rnorm(1000,8,1))
+
+# true quality for each school independent of size
+set.seed(1)
+mu <- round(80 + 2*rt(1000, 5))
+schools <- data.frame(id = paste("PS", 1:100),
+                      size = n,
+                      quality = mu,
+                      rank = rank(-mu))
+# top 10 schools
+schools %>% top_n(10, quality) %>% arrange(desc(quality))
+
+# simulated test scores
+set.seed(1)
+scores <- sapply(1:nrow(schools), function(i){
+  scores <- rnorm(schools$size[i], schools$quality[i], 30)
+  scores
+})
+schools <- schools %>% mutate(score = sapply(scores, mean))
+
+# Q1. What are the top schools based on the average score? Show just the ID, size, and the average score.
+# Report the ID of the top school and average score of the 10th school. What is the ID of the top school?
+# Note that the school IDs are given in the form "PS x" - where x is a number. Report the number only.
+
+top10_score <- schools %>% top_n(10, score) %>% arrange(desc(score))
+top10_score
+
+# Q2. Compare the median school size to the median school size of the top 10 schools based on the score.
+# What is the median school size overall?
+# What is the median school size of the of the top 10 schools based on the score?
+medsize_overall <- median(schools$size)
+medsize_overall
+medsize_top10 <- median(top10_score$size)
+medsize_top10
+
+
+# Q3. According to this analysis, it appears that small schools produce better test scores than large schools.
+# Four out of the top 10 schools have 100 or fewer students. But how can this be? We constructed the 
+# simulation so that quality and size were independent. Repeat the exercise for the worst 10 schools.
+# What is the median school size of the bottom 10 schools based on the score?
+
+btm10_score <- schools %>% top_n(-10, score) %>% arrange(score)
+btm10_score
+medsize_btm10 <- median(btm10_score$size)
+medsize_btm10
+
+
+# Q4. Answer
+schools %>% ggplot(aes(size, score)) +
+  geom_point(alpha = 0.5) +
+  geom_point(data = filter(schools, rank<=10), col = 2)
+
+
+# Q5. Let's use regularization to pick the best schools. Remember regularization shrinks deviations from the 
+# average towards 0. To apply regularization here, we first need to define the overall average for all 
+# schools, using the following code:
+
+overall <- mean(sapply(scores, mean))
+
+# Then, we need to define, for each school, how it deviates from that average. Write code that estimates the 
+# score above the average for each school but dividing by n+alpha  instead of n, with n the schools size and
+# alpha the regularization parameters. Try alpha=25. What is the ID of the top school with regularization?
+
+reg_schools <- schools %>% select(id, size, score) %>%
+  mutate(b_i = (score - overall)*size/(size+25)) %>%
+  mutate(reg_score = overall + b_i)
+
+top10_reg_schools <- reg_schools %>% top_n(10, reg_score) %>% arrange(desc(reg_score))
+top10_reg_schools
+
+
+# Q6. Notice that this improves things a bit. The number of small schools that are not highly ranked is now 
+# lower. Is there a better ? Find the  alpha that minimizes the 
+# RMSE = (1/100)Summation_i:1-100(quality - estimate)^2. What value of alpha gives the minimum RMSE?
+
+RMSE <- function(mu, score_reg){
+  sum((mu - score_reg)^2)/100
+}
+
+alpha <- seq(1, 500, 1)
+rmses <- sapply(alpha, function(alpha){
+  score_reg <- sapply(scores, function(x)  overall + sum(x-overall)/(length(x)+alpha))
+  return(RMSE(mu, score_reg))
+})
+alpha[which.min(rmses)]
+qplot(alpha, rmses)
+
+
+# Q7. Rank the schools based on the average obtained with the best . Note that no small school is incorrectly
+# included. What is the ID of the top school now? 
+# What is the regularized average score of the 10th school now?
+alpha <- 128
+score_reg <- sapply(scores, function(x)  overall + sum(x-overall)/(length(x)+alpha))
+schools %>% mutate(score_reg = score_reg) %>%
+  top_n(10, score_reg) %>% arrange(desc(score_reg))
+
+
+# Q8. A common mistake made when using regularization is shrinking values towards 0 that are not centered 
+# around 0. For example, if we don't subtract the overall average before shrinking, we actually obtain a 
+# very similar result. Confirm this by re-running the code from the exercise in Q6 but without removing the 
+# overall mean. What value of  gives the minimum RMSE here?
+RMSE <- function(mu, score_reg){
+  sum((mu - score_reg)^2)/100
+}
+
+alpha <- seq(10, 250)
+rmses <- sapply(alpha, function(alpha){
+  score_reg <- sapply(scores, function(x)  sum(x)/(length(x)+alpha))
+  return(RMSE(mu, score_reg))
+})
+alpha[which.min(rmses)]
+qplot(alpha, rmses) 
+
