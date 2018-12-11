@@ -207,6 +207,7 @@ top10_reg_schools <- reg_schools %>% top_n(10, reg_score) %>% arrange(desc(reg_s
 top10_reg_schools
 
 
+
 # Q6. Notice that this improves things a bit. The number of small schools that are not highly ranked is now 
 # lower. Is there a better ? Find the  alpha that minimizes the 
 # RMSE = (1/100)Summation_i:1-100(quality - estimate)^2. What value of alpha gives the minimum RMSE?
@@ -250,3 +251,53 @@ alpha[which.min(rmses)]
 qplot(alpha, rmses) 
 
 
+
+### Matrix Factorization
+# using a subset of movielens that has many ratings and users
+library(dslabs)
+library(tidyverse)
+library(dplyr)
+data("movielens")
+library(caret)
+
+train_small <- movielens %>%
+  group_by(movieId) %>%
+  filter(n() >= 50 | movieId == 3252) %>% ungroup() %>% # 3252 is Scent of a Woman used in eg.
+  group_by(userId) %>%
+  filter(n() >=50) %>% ungroup()
+y <- train_small %>%
+  select(userId, movieId, rating) %>%
+  spread(movieId, rating) %>%
+  as.matrix()
+
+# add rownames and columnnames
+rownames(y) <- y[,1]
+movie_titles <- movielens %>%
+  select(movieId, title) %>%
+  distinct()
+colnames(y) <- with(movie_titles, title[match(colnames(y),movieId)])
+
+y <- sweep(y, 1, rowMeans(y, na.rm = TRUE))
+y <- sweep(y, 2, colMeans(y, na.rm = TRUE))
+
+# set na to 0
+y[is.na(y)] <- 0
+y <- sweep(y, 1, rowMeans(y))
+pca <- prcomp(y)
+
+# pple cpts or q vectors
+dim(pca$rotation)
+
+# p vectors
+dim((pca$x))
+
+# accessing vaariability via plot
+plot(pca$sdev)
+
+# var explained
+var_explained <- cumsum(pca$sdev^2/sum(pca$sdev^2))
+plot(var_explained)
+
+# movie association with PCs
+pcs <- data.frame(pca$rotation, name = colnames(y))
+pcs %>% select(name, PC1) %>% arrange(PC1) %>% slice(1:10)
