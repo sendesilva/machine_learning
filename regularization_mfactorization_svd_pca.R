@@ -207,6 +207,7 @@ top10_reg_schools <- reg_schools %>% top_n(10, reg_score) %>% arrange(desc(reg_s
 top10_reg_schools
 
 
+
 # Q6. Notice that this improves things a bit. The number of small schools that are not highly ranked is now 
 # lower. Is there a better ? Find the  alpha that minimizes the 
 # RMSE = (1/100)Summation_i:1-100(quality - estimate)^2. What value of alpha gives the minimum RMSE?
