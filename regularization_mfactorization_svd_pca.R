@@ -249,3 +249,4 @@ rmses <- sapply(alpha, function(alpha){
 alpha[which.min(rmses)]
 qplot(alpha, rmses) 
 
+
