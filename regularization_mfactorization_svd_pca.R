@@ -205,6 +205,7 @@ reg_schools <- schools %>% select(id, size, score) %>%
 
 top10_reg_schools <- reg_schools %>% top_n(10, reg_score) %>% arrange(desc(reg_score))
 top10_reg_schools
+<<<<<<< HEAD
 
 
 # Q6. Notice that this improves things a bit. The number of small schools that are not highly ranked is now 
@@ -249,3 +250,5 @@ rmses <- sapply(alpha, function(alpha){
 alpha[which.min(rmses)]
 qplot(alpha, rmses) 
 
+=======
+>>>>>>> 8581ba81cf08b77cbc4e14e1cffcdd6b6fc3f244
