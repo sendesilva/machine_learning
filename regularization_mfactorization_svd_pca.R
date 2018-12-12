@@ -301,3 +301,4 @@ plot(var_explained)
 # movie association with PCs
 pcs <- data.frame(pca$rotation, name = colnames(y))
 pcs %>% select(name, PC1) %>% arrange(PC1) %>% slice(1:10)
+
