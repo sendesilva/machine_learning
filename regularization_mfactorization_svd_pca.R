@@ -330,5 +330,35 @@ my_image <- function(x, zlim = range(x), ...){
 }
 
 my_image(y)  # students that test well on top and reverse at the btm and grouped by 3 subjects
-=======
->>>>>>> b95d7ce998dcc33c1fc85254c523ba4ffcf765e5
+
+
+# Q2. You can examine the correlation between the test scores directly:
+# Which of the following best describes what you see?
+my_image(cor(y), zlim = c(-1,1))
+range(cor(y)) #  0.4855371 1.0000000
+axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2) 
+# There is correlation among all tests, but higher if the tests are in science and math and even higher 
+# within each subject. correct
+
+
+# Q3. Use the function svd to compute the SVD of y. This function will return U, V, 
+# and the diagonal entries of D.
+
+s <- svd(y)
+names(s)
+
+# check that SVD works:
+y_svd <- s$u %*% diag(s$d) %*% t(s$v)
+max(abs(y - y_svd))
+
+# Compute the sum of squares of the columns of  Y and store them in ss_y. Then compute the sum of squares 
+# of columns of the transformed  YV and store them in ss_yv. 
+# Confirm that sum(ss_y) is equal to sum(ss_yv). 
+# What is the value of sum(ss_y) (and also the value of sum(ss_yv))?
+yxy <- y*y
+ss_y <- sum(colSums(yxy))
+ss_y #  175434.6 - same as sum(ss_y)
+
+y_svd_sq <- y_svd*y_svd
+ss_yv <- sum(colSums(y_svd_sq))
+ss_yv #  175434.6 - same as sum(ss_yv)
