@@ -401,3 +401,4 @@ identical(s$u %*% diag(s$d), sweep(s$u, 2, s$d, FUN = "*"))
 # describe what you find. What do you observe?
 #ud <- s$u%*%s$d
 plot(y_svd[,1], rowMeans(y))
+
