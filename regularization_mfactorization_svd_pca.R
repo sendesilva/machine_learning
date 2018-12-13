@@ -401,3 +401,38 @@ identical(s$u %*% diag(s$d), sweep(s$u, 2, s$d, FUN = "*"))
 # describe what you find. What do you observe?
 #ud <- s$u%*%s$d
 plot(y_svd[,1], rowMeans(y))
+
+
+# Q9. We note that the signs in SVD are arbitrary because: UDV^T = (-U)Dz(-V)^T
+# With this in mind we see that the first column of UD is almost identical to the average score for each
+# student except for the sign. This implies that multiplying Y by the first column of V must be 
+# performing a similar operation to taking the average. Make an image plot of V and describe the first 
+# column relative to others and how this relates to taking an average.
+# How does the first column relate to the others, and how does this relate to taking an average?
+
+# my_image(cor(y), zlim = c(-1,1))
+# range(cor(y)) #  0.4855371 1.0000000
+# axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2) 
+my_image(s$v)
+dim(s$v)
+
+
+## Ungraded practice Qs10-13
+
+
+
+
+
+
+
+
+
+
+
+### Comprehension Check: Clustering
+
+# Q1. Load the tissue_gene_expression dataset. Remove the row means and compute the distance between 
+# each observation. Store the result in d. 
+# Which of the following lines of code correctly does this computation?
+
+
