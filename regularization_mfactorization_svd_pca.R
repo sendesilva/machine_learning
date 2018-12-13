@@ -359,6 +359,7 @@ y_sq <- y*y # entries squared
 ss_y <- colSums(y_sq)
 sum(ss_y) #  175434.6 
 
+
 y_svd_sq <- y_svd*y_svd # entries squared
 ss_yv <- colSums(y_svd_sq)
 sum(ss_yv) #  175434.6
@@ -384,5 +385,4 @@ var_explained <- cumsum(sd(YV_t[,1])^2/sum(var(YV_t))) + cumsum(sd(YV_t[,2])^2/s
 
 var_explained
 
-yv_t <- s$d^2
-str(yv_t)
+
