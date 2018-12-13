@@ -355,11 +355,11 @@ max(abs(y - y_svd))
 # of columns of the transformed  YV and store them in ss_yv. 
 # Confirm that sum(ss_y) is equal to sum(ss_yv). 
 # What is the value of sum(ss_y) (and also the value of sum(ss_yv))?
-yxy <- y*y
-ss_y <- colSums(yxy)
+y_sq <- y*y # entries squared
+ss_y <- colSums(y_sq)
 sum(ss_y) #  175434.6 
 
-y_svd_sq <- y_svd*y_svd
+y_svd_sq <- y_svd*y_svd # entries squared
 ss_yv <- colSums(y_svd_sq)
 sum(ss_yv) #  175434.6
 
@@ -368,5 +368,21 @@ sum(ss_yv) #  175434.6
 # understanding how  is useful, plot ss_y against the column number and then do the same for ss_yv.
 # What do you observe?
 
-plot(yxy)
-plot()
+plot(ss_y)
+plot(ss_yv)
+
+
+# Q6. So from the above we know that the sum of squares of the columns of  Y (the total sum of squares) 
+# adds up to the sum of s$d^2 and that the transformation  YV gives us columns with sums of squares 
+# equal to s$d^2. Now compute the percent of the total variability that is explained by just the first 
+# three columns of YV. 
+# What proportion of the total variability is explained by the first three columns of YV?
+
+YV_t <- y%*%s$v
+var_explained <- cumsum(sd(YV_t[,1])^2/sum(var(YV_t))) + cumsum(sd(YV_t[,2])^2/sum(var(YV_t))) +
+  cumsum(sd(YV_t[,3])^2/sum(var(YV_t)))
+
+var_explained
+
+yv_t <- s$d^2
+str(yv_t)
