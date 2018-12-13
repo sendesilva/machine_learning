@@ -362,3 +362,4 @@ ss_y #  175434.6 - same as sum(ss_y)
 y_svd_sq <- y_svd*y_svd
 ss_yv <- sum(colSums(y_svd_sq))
 ss_yv #  175434.6 - same as sum(ss_yv)
+
