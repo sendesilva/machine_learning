@@ -359,6 +359,7 @@ y_sq <- y*y # entries squared
 ss_y <- colSums(y_sq)
 sum(ss_y) #  175434.6 
 
+
 y_svd_sq <- y_svd*y_svd # entries squared
 ss_yv <- colSums(y_svd_sq)
 sum(ss_yv) #  175434.6
@@ -384,5 +385,19 @@ var_explained <- cumsum(sd(YV_t[,1])^2/sum(var(YV_t))) + cumsum(sd(YV_t[,2])^2/s
 
 var_explained
 
-yv_t <- s$d^2
-str(yv_t)
+
+# Q7. A useful computational trick to avoid creating the matrix diag(s$d). To motivate this, we note 
+# that if we write out in its columns [U1, U2, .. Up] then  UD = [U1d1,1, U2d2,2, ... Updp,p]
+# Use the sweep function to compute UD without constructing diag(s$d) or using matrix multiplication.
+
+identical(s$u %*% diag(s$d), sweep(s$u, 2, s$d, FUN = "*"))
+
+
+# Q8. We know that U1d1,1, the first column of UD, has the most variability of all the columns of UD.
+# Earlier we looked at an image of  using my_image(y), in which we saw that the student to student 
+# variability is quite large and that students that are good in one subject tend to be good in all. 
+# This implies that the average (across all subjects) for each student should explain a lot of the 
+# variability. Compute the average score for each student, plot it against U1d1,1, and 
+# describe what you find. What do you observe?
+#ud <- s$u%*%s$d
+plot(y_svd[,1], rowMeans(y))
