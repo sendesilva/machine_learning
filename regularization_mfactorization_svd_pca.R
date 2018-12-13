@@ -356,9 +356,17 @@ max(abs(y - y_svd))
 # Confirm that sum(ss_y) is equal to sum(ss_yv). 
 # What is the value of sum(ss_y) (and also the value of sum(ss_yv))?
 yxy <- y*y
-ss_y <- sum(colSums(yxy))
-ss_y #  175434.6 - same as sum(ss_y)
+ss_y <- colSums(yxy)
+sum(ss_y) #  175434.6 
 
 y_svd_sq <- y_svd*y_svd
-ss_yv <- sum(colSums(y_svd_sq))
-ss_yv #  175434.6 - same as sum(ss_yv)
+ss_yv <- colSums(y_svd_sq)
+sum(ss_yv) #  175434.6
+
+
+# Q4. We see that the total sum of squares is preserved. This is because  is orthogonal. Now to start 
+# understanding how  is useful, plot ss_y against the column number and then do the same for ss_yv.
+# What do you observe?
+
+plot(yxy)
+plot()
