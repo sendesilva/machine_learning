@@ -302,6 +302,7 @@ plot(var_explained)
 pcs <- data.frame(pca$rotation, name = colnames(y))
 pcs %>% select(name, PC1) %>% arrange(PC1) %>% slice(1:10)
 
+<<<<<<< HEAD
 
 ### Comprehension check: Matrix Factorization - SVD
 
@@ -329,3 +330,5 @@ my_image <- function(x, zlim = range(x), ...){
 }
 
 my_image(y)  # students that test well on top and reverse at the btm and grouped by 3 subjects
+=======
+>>>>>>> b95d7ce998dcc33c1fc85254c523ba4ffcf765e5
