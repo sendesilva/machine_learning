@@ -368,5 +368,3 @@ sum(ss_yv) #  175434.6
 # understanding how  is useful, plot ss_y against the column number and then do the same for ss_yv.
 # What do you observe?
 
-plot(yxy)
-plot()
