@@ -129,28 +129,10 @@ accuracy <- map_df(ks, function(k){
 # to do the same. Use the code described in these videos to select the F_1 measure and plot it against k. 
 # are to the F_1 of about 0.6 we obtained with regression. Set the seed to 1
 
-# library(caret)
-# library(dslabs)
-# data(heights)
-# y <- heights$sex
-# x <- heights$height
-# set.seed(2)
-# test_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
-# test_set <- heights[test_index,]
-# train_set <- heights[-test_index,]
-# 
-# cutoff <- seq(61, 70)
-# F_1 <- map_dbl(cutoff, function(x){
-#   y_hat <- ifelse(train_set$height > x, "Male", "Female") %>%
-#     factor(levels = levels(test_set$sex))
-#   F_meas(data = y_hat, reference = factor(train_set$sex))
-# })
-# plot(cutoff, F_1)
-# max(F_1)
-
 library(caret)
 library(dslabs)
-#library(purrr)
+library(purrr)
+library(tidyverse)
 data(heights)
 y <- heights$sex
 x <- heights$height
@@ -159,7 +141,7 @@ train_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
 test_set <- heights[-train_index,]
 train_set <- heights[train_index,]
 
-ks <- seq(1, 101, 1)
+ks <- seq(1, 101, 3)
 F_1 <- map_df(ks, function(k){
   set.seed(1)
   fit <- knn3(sex ~ height, data = train_set, k = k)
@@ -169,10 +151,12 @@ F_1 <- map_df(ks, function(k){
 })
 F_1
 F_1 %>% na.omit() %>% ggplot(aes(k, F_val)) + geom_line()
-F_1
-best_k <- k[which.max(F_1$F_val)]
+max(F_1$F_val)
+best_k <- F_1$k[which.max(F_1$F_val)]
 best_k
-# max F_1 = .605 correct best_k = 50, 33, 45 (reverse test and training set), 85 all 4 wrong
+F_1 %>% slice(which.max(F_1$F_val)) # alternate coding
+# using seq(1, 101, 3): max F_1 = .605 correct best_k = 50, 33, 45 (reverse test and training set), 
+# 85 all 4 wrong
 
 
 # Q2 Split the data into training and test sets, and report the accuracy you obtain. 
@@ -180,50 +164,28 @@ best_k
 library(dslabs)
 data("tissue_gene_expression")
 
-y <- tissue_gene_expression$y
-x <- tissue_gene_expression$x
-set.seed(1)
-test_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
-test_set <- tissue_gene_expression[test_index,]
-train_set <- tissue_gene_expression[-test_index,]
-ks <- seq(1, 11, 2)
-accuracy <- map_df(ks, function(k){
-  fit <- knn3(y ~ x, data = test_set, k = k)
-  y_hat <- predict(fit, train_set, type = "class") %>%
-    factor(levels = levels(train_set))
-  match <- confusionMatrix(data = y_hat, reference = test_set)$overall["Accuracy"]
-  list(k=k, match=match)
-})
-# F_1
-# F_1 %>% na.omit() %>% ggplot(aes(k, F_val)) + geom_line()
-# F_1
-# best_k <- k[which.max(F_1$F_val)]
-# best_k
-
-# Q2 Split the data into training and test sets, and report the accuracy you obtain. 
-# Try it for k = 1, 3, 5, 7, 9, 11. Set the seed to 1.
-# library(dslabs)
-# data("tissue_gene_expression")
-# library(caret)
-# 
 # y <- tissue_gene_expression$y
 # x <- tissue_gene_expression$x
 # set.seed(1)
-# train_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
-# # test_set <- tissue_gene_expression[test_index,]
-# # train_set <- tissue_gene_expression[-test_index,]
-# test_set <- x[-train_index,]
-# train_set <- x[train_index,]
-# test_set_y <- y[-train_index]
-# train_set_y <- y[train_index]
+# train_index <- createDataPartition(tissue_gene_expression$y, times = 1, p = 0.5, list = FALSE)
+# test_set_x <- x[-train_index,]
+# train_set_x <- x[train_index,]
+# # test_set_y <- y[-train_index,]
+# # train_set_y <- y[train_index,]
 # ks <- seq(1, 11, 2)
 # accuracy <- map_df(ks, function(k){
-#   fit <- knn3(x,y, data = train_set, k = k)
-#   y_hat <- predict(fit, test_set, type = "class") %>%
-#     factor(levels = levels(train_set))
-#   match <- confusionMatrix(data = y_hat, reference = test_set)$overall["Accuracy"]
+#   fit <- knn3(train_set_x, y, k = k)
+#   y_hat <- predict(fit, test_set_x, type = "class")
+#   match <- confusionMatrix(data = y_hat, reference = test_set_x)$overall["Accuracy"]
 #   list(k=k, match=match)
 # })
+
+# alt code:
+y <- tissue_gene_expression$y
+x <- tissue_gene_expression$x
+set.seed(1)
+fit <- train(x, y, method = "knn", tuneGrid = data.frame(k = seq(1,11,2)))
+
 
 
 ### Comprehensino check: X-validation
