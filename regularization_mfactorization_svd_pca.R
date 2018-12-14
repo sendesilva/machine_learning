@@ -447,4 +447,3 @@ h <- hclust(d)
 plot(h, cex = 0.75) # liver
 
 
-
