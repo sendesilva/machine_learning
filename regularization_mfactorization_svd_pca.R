@@ -402,6 +402,7 @@ identical(s$u %*% diag(s$d), sweep(s$u, 2, s$d, FUN = "*"))
 #ud <- s$u%*%s$d
 plot(y_svd[,1], rowMeans(y))
 
+<<<<<<< HEAD
 
 # Q9. We note that the signs in SVD are arbitrary because: UDV^T = (-U)Dz(-V)^T
 # With this in mind we see that the first column of UD is almost identical to the average score for each
@@ -434,5 +435,16 @@ dim(s$v)
 # Q1. Load the tissue_gene_expression dataset. Remove the row means and compute the distance between 
 # each observation. Store the result in d. 
 # Which of the following lines of code correctly does this computation?
+
+data("tissue_gene_expression")
+d <- dist(tissue_gene_expression$x - rowMeans(tissue_gene_expression$x))
+
+
+# Q2. Make a hierarchical clustering plot and add the tissue types as labels. You will observe multiple 
+# branches. Which tissue type is in the branch farthest to the left?
+
+h <- hclust(d)
+plot(h, cex = 0.75) # liver
+
 
 
