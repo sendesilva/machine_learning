@@ -470,3 +470,4 @@ heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale =
 # heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = sample(colors))
 # heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = sample(colors))
 
+
