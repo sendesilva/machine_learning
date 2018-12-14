@@ -402,7 +402,7 @@ identical(s$u %*% diag(s$d), sweep(s$u, 2, s$d, FUN = "*"))
 #ud <- s$u%*%s$d
 plot(y_svd[,1], rowMeans(y))
 
-<<<<<<< HEAD
+
 
 # Q9. We note that the signs in SVD are arbitrary because: UDV^T = (-U)Dz(-V)^T
 # With this in mind we see that the first column of UD is almost identical to the average score for each
@@ -420,15 +420,7 @@ dim(s$v)
 
 ## Ungraded practice Qs10-13
 
-
-
-
-
-
-
-
-
-
+#Q10-13 to add
 
 ### Comprehension Check: Clustering
 
@@ -447,4 +439,34 @@ h <- hclust(d)
 plot(h, cex = 0.75) # liver
 
 
+# Q3. Run a k-means clustering on the data with K=7. Make a table comparing the identified clusters to 
+# the actual tissue types. Run the algorithm several times to see how the answer changes.
+# What do you observe for the clustering of the liver tissue?
+
+x_0 <- d
+x_0[is.na(x_0)] <- 0
+k <- kmeans(x_0, centers = 7)
+groups <- k$cluster
+split(names(groups), groups)
+
+k <- kmeans(x_0, centers = 7, nstart = 10)
+groups <- k$cluster
+split(names(groups), groups)
+
+
+# Q4. Select the 50 most variable genes. Make sure the observations show up in the columns, that the 
+# predictor are centered, and add a color bar to show the different tissue types. Hint: use the 
+# ColSideColors argument to assign colors. Also, use col = RColorBrewer::brewer.pal(11, "RdBu") for a 
+# better use of colors. Part of the code is provided for you here:
+
+library(RColorBrewer)
+sds <- matrixStats::colSds(tissue_gene_expression$x)
+ind <- order(sds, decreasing = TRUE)[1:50]
+colors <- brewer.pal(7, "Dark2")[as.numeric(tissue_gene_expression$y)]
+
+heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = colors)
+# options below dont show diff tissue types clearly
+# heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = rev(colors))
+# heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = sample(colors))
+# heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = sample(colors))
 
