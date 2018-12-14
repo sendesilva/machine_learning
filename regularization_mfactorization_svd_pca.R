@@ -421,6 +421,25 @@ dim(s$v)
 ## Ungraded practice Qs10-13
 
 #Q10-13 to add
+# Q10 Make an image of U1d1,1V1^T and compare with image of Y
+# u_d_vT <- (s$u[,1])*(as.matrix(s$d)[,1])*(t(s$v)[1]) # non comformable???
+# ans
+plot(s$u[,1], ylim = c(-0.25, 0.25))
+plot(s$v[,1], ylim = c(-0.25, 0.25))
+with(s, my_image((u[, 1, drop=FALSE]*d[1]) %*% t(v[, 1, drop=FALSE])))
+my_image(y)
+
+# Q11  Make an image of U2d2,2V2^T
+resid <- y - with(s,(u[, 1, drop=FALSE]*d[1]) %*% t(v[, 1, drop=FALSE]))
+my_image(cor(resid), zlim = c(-1,1))
+axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2)
+
+with(s, my_image((u[, 2, drop=FALSE]*d[2]) %*% t(v[, 2, drop=FALSE])))
+my_image(resid)
+
+
+
+
 
 ### Comprehension Check: Clustering
 
@@ -469,4 +488,5 @@ heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale =
 # heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = rev(colors))
 # heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = sample(colors))
 # heatmap(t(tissue_gene_expression$x[,ind]), col = brewer.pal(11, "RdBu"), scale = "row", ColSideColors = sample(colors))
+
 
