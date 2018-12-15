@@ -190,6 +190,33 @@ accuracy
 
 
 ### Comprehension check: X-validation
+
+# y <- tissue_gene_expression$y
+# x <- tissue_gene_expression$x
+# set.seed(1)
+# train_index <- createDataPartition(tissue_gene_expression$y, times = 1, p = 0.5, list = FALSE)
+# test_set_x <- x[-train_index,]
+# train_set_x <- x[train_index,]
+# # test_set_y <- y[-train_index,]
+# # train_set_y <- y[train_index,]
+# ks <- seq(1, 11, 2)
+# accuracy <- map_df(ks, function(k){
+#   fit <- knn3(train_set_x, y, k = k)
+#   y_hat <- predict(fit, test_set_x, type = "class")
+#   match <- confusionMatrix(data = y_hat, reference = test_set_x)$overall["Accuracy"]
+#   list(k=k, match=match)
+# })
+
+# alt code:
+y <- tissue_gene_expression$y
+x <- tissue_gene_expression$x
+set.seed(1)
+fit <- train(x, y, method = "knn", tuneGrid = data.frame(k = seq(1,11,2)))
+
+
+
+### Comprehension check: X-validation
+
 # Q1
 library(caret)
 library(tidyverse)

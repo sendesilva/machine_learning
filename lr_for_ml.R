@@ -535,26 +535,18 @@ colMeans(x)
 # boxplot by digit class.) What proportion of pixels are in the grey area overall, defined as 
 # values between 50 and 205?
 library(broom)
-mnist <- read_mnist()
+if(!exists("mnist")) mnist <- read_mnist()
 class(mnist$train$images)
 x <- mnist$train$images
 y <- mnist$train$labels
-avg <- rowMeans(x)
-sums <- rowSums(x)
+# avg <- rowMeans(x)
+# sums <- rowSums(x)
 
-# a boxplot can show how intensity changes from pixel to pixel
-pixel <- data.frame(labels = as.factor(y), row_averages = avg)
+data.frame(labels = as.factor(y), row_averages = avg) %>%
+  ggplot(aes(labels, row_averages)) +
+  geom_boxplot()
 
-# %>%
-#   ggplot(aes(labels, row_averages)) +
-#   geom_boxplot()
-# 
-# a <- sum(avg > 50 & avg < 205)
-# b <- sum(avg > 0)
-# a/b
+a <- sum(x > 50 & x < 205)
+b <- sum(x >= 0)
+a/b
 
-# library(matrixStats)
-# sds <- colSds(x) 
-# head(sds)
-# tail(sds)
-# pix <- colMeans(x)
