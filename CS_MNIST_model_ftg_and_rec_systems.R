@@ -192,6 +192,11 @@ better_than_mean <- acc[acc > ensemble]
 length(better_than_mean)
 better_than_mean
 
+# ans
+ind <- acc > mean(y_hat == mnist_27$test$y)
+sum(ind)
+models[ind]
+
 
 # Q6 It is tempting to remove the methods that do not perform well and re-do the ensemble. The problem with 
 # this approach is that we are using the test data to make a decision. However, we could use the accuracy 
