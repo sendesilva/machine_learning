@@ -135,6 +135,8 @@ models <- c("glm", "lda",  "naive_bayes",  "svmLinear",
 # Run the following code to train the various models:
 library(caret)
 library(dslabs)
+library(mboost)
+library(libcoin)
 set.seed(1)
 data("mnist_27")
 
@@ -166,3 +168,45 @@ mv <- apply(pred, 1, function(object) majorityVote(object)$majority)
 mean(as.factor(mv) == mnist_27$test$y)
 
 
+#Q5 In Q3, we computed the accuracy of each method on the training set and noticed that the individual 
+# accuracies varied. How many of the individual methods do better than the ensemble?
+library(randomForest)
+library(Rborist)
+
+pred <- sapply(fits, function(object) 
+  predict(object, newdata = mnist_27$test))
+dim(pred)
+
+acc <- colMeans(pred == mnist_27$test$y)
+acc
+mean(acc)
+
+votes <- rowMeans(pred == "7")
+y_hat <- ifelse(votes > 0.5, "7", "2")
+mean(y_hat == mnist_27$test$y)
+# mean=0.84, ans=0.845
+
+# on test set
+ensemble <- 0.845
+better_than_mean <- acc[acc > ensemble]
+length(better_than_mean)
+better_than_mean
+
+
+# Q6 It is tempting to remove the methods that do not perform well and re-do the ensemble. The problem with 
+# this approach is that we are using the test data to make a decision. However, we could use the accuracy 
+# estimates obtained from cross validation with the training data. Obtain these estimates and save them in 
+# an object. Report the mean accuracy of the new estimates.
+# What is the mean accuracy of the new estimates?
+
+list(fits)
+fits_acc <- sapply(fits, function(model) model$results["Accuracy"])
+for (i in 1:length(fits_acc)) {
+    fits_acc_num <- fits_acc[[i]]
+   }
+head(fits_acc_num)
+mean(fits_acc_num) # [1] 0.8388977
+
+# ans:
+acc_hat <- sapply(fits, function(fit) min(fit$results$Accuracy))
+mean(acc_hat) # 0.8118911
