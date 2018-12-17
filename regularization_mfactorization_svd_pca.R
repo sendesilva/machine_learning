@@ -437,6 +437,10 @@ axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2)
 with(s, my_image((u[, 2, drop=FALSE]*d[2]) %*% t(v[, 2, drop=FALSE])))
 my_image(resid)
 
+plot(s$u[,2], ylim = c(-0.5, 0.5))
+plot(s$v[,2], ylim = c(-0.5, 0.5))
+with(s, my_image((u[, 2, drop=FALSE]*d[2]) %*% t(v[, 2, drop=FALSE])))
+my_image(resid)
 
 
 
