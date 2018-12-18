@@ -443,7 +443,8 @@ with(s, my_image((u[, 2, drop=FALSE]*d[2]) %*% t(v[, 2, drop=FALSE])))
 my_image(resid)
 
 
-# Q12 Y approx= U1d1,1V1^T + U2d2,2V2^T
+
+# Q12 Y approx= U1.d1,1.V1^T + U2.d2,2.V2^T
 resid <- y - with(s,sweep(u[, 1:2], 2, d[1:2], FUN="*") %*% t(v[, 1:2]))
 my_image(cor(resid), zlim = c(-1,1))
 axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2)
@@ -455,6 +456,23 @@ plot(s$v[,3], ylim = c(-0.5, 0.5))
 # make image of U3d3,3,V3^T
 with(s, my_image((u[, 3, drop=FALSE]*d[3]) %*% t(v[, 3, drop=FALSE])))
 my_image(resid)
+
+
+
+# Q13 Y approx= U1.d1,1.V1^T + U2.d2,2.V2^T + U3.d3,3.V3^T
+resid <- y - with(s,sweep(u[, 1:3], 2, d[1:3], FUN="*") %*% t(v[, 1:3]))
+my_image(cor(resid), zlim = c(-1,1))
+axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2)
+
+my_image(y)
+with(s, my_image((u[, 1:3, drop=FALSE]*d[1:3]) %*% t(v[, 1:3, drop=FALSE])))
+my_image(resid)
+
+# Ans
+y_hat <- with(s,sweep(u[, 1:3], 2, d[1:3], FUN="*") %*% t(v[, 1:3]))
+my_image(y, zlim = range(y))
+my_image(y_hat, zlim = range(y))
+my_image(y - y_hat, zlim = range(y))
 
 
 
