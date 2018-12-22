@@ -459,6 +459,7 @@ my_image(resid)
 
 
 
+
 # Q13 Y approx= U1.d1,1.V1^T + U2.d2,2.V2^T + U3.d3,3.V3^T
 resid <- y - with(s,sweep(u[, 1:3], 2, d[1:3], FUN="*") %*% t(v[, 1:3]))
 my_image(cor(resid), zlim = c(-1,1))
